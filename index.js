@@ -11,15 +11,16 @@ import * as dotenv from 'dotenv';
 dotenv.config()
 
 const app = express();
-const PORT = process.env.PORT; // Default to 3000 if PORT is not set in the environment
+const PORT = process.env.PORT || 3000; // Default to 3000 if PORT is not set in the environment
 const mongo_url = process.env.MONGO_URL;
 
 
 app.use(express.json({ limit: '10mb' }));
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
+app.use((request, response, next) => {
+  response.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+  response.header('Access-Control-Allow-Origin','https://nxttrip.netlify.app');
+  response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  response.header('Access-Control-Allow-Headers', 'Content-Type');
   next();
 });
 
