@@ -180,7 +180,6 @@ async function Update_trip(data) {
     .insertOne(data);
 }
 
-
 app.post("/signup", async function (request, response) {
   const {name, email, new_pass}= request.body;
   const userfrondb = await getUsername(name);
