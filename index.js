@@ -6,27 +6,28 @@ import cors from 'cors';
 import { MongoClient } from "mongodb";
 import  jwt  from "jsonwebtoken";
 import { authe } from "./middleware/auth.js";
-import multer from "multer";
-import path from "path";
+import * as dotenv from 'dotenv';
+dotenv.config()
 
-const PORT = 4000;
+
+const PORT = process.env.PORT;
 
 app.use(express.json({ limit: '10mb' }));
 app.use(cors());
 
 
-const mongo_url = "mongodb://127.0.0.1";
+const mongo_url = process.env.mongo_url;
 
 
-export const client = new MongoClient(mongo_url); // dial
-await client.connect(); // call and top level await
+export const client = new MongoClient(mongo_url); 
+await client.connect(); 
 console.log("mongodb is connected ");
 
 
 
 
 
-app.get("/Triplist", async function (request, response) {
+app.get("/Triplist",authe, async function (request, response) {
   const list= await client
   .db("Tripdb")
   .collection("addlist")
@@ -35,7 +36,7 @@ app.get("/Triplist", async function (request, response) {
   response.send(list);
 });
 
-app.get("/Updatelist", async function (request, response) {
+app.get("/Updatelist",authe, async function (request, response) {
   const list= await client
   .db("Tripdb")
   .collection("updatelist")
@@ -43,6 +44,56 @@ app.get("/Updatelist", async function (request, response) {
   .toArray();
   response.send(list);
 });
+
+app.get("/Addnotes",authe, async function (request, response) {
+  const list= await client
+  .db("Tripdb")
+  .collection("addnotes")
+  .find({})
+  .toArray();
+  response.send(list);
+});
+
+app.get("/member",authe, async function (request, response) {
+  const list= await client
+  .db("Tripdb")
+  .collection("login")
+  .find({})
+  .toArray();
+  response.send(list);
+});
+
+
+app.delete("/:name", async function (request, response) {
+  const { name } = request.params;
+;
+  const deletelist = await Deletelist(name);
+  deletelist.deletedCount >= 1
+    ? response.send({ message: "delete movie suessfully" }) : response.status(404).send(`movie not found`);
+});
+
+ async function Deletelist (name) {
+  return await client
+  .db("Tripdb")
+  .collection("addlist")
+  .deleteOne({trip_name:name});
+}
+
+app.delete("/notes/:title", async function (request, response) {
+  const { title } = request.params;
+console.log(title);
+  const deletenote = await Deletenote(title);
+  deletenote.deletedCount >= 1
+    ? response.send({ message: "delete movie suessfully" }) : response.status(404).send(`movie not found`);
+});
+
+ async function Deletenote (title) {
+  return await client
+  .db("Tripdb")
+  .collection("addnotes")
+  .deleteOne({title:title});
+}
+
 
 
 
@@ -58,6 +109,45 @@ app.post("/Add_trip",async function (req, response) {
   });
   response.send(results);
 });
+
+app.put("/notes/:titles",async function (req, response) {
+  const {titles}= req.params;
+  const {title,notes}= req.body;
+  
+  const updateresult = await  Updatenotes(titles,{
+    title:title,
+    notes:notes,
+  });
+  updateresult
+    ? response.send(updateresult)
+    : response.status(404).send(`note not found`);
+});
+
+async function Updatenotes(titles,data) {
+  return await client
+    .db("Tripdb")
+    .collection("addnotes")
+    .updateOne({title:titles},{$set:data});
+}
+
+app.post("/Add_notes",async function (req, response) {
+  const {title,notes}= req.body;
+  
+  const results = await Add_notes({
+      title:title,
+      notes:notes,
+      
+  });
+  response.send(results);
+});
+
+async function Add_notes(data) {
+  return await client
+    .db("Tripdb")
+    .collection("addnotes")
+    .insertOne(data);
+}
+
 app.post("/update_trip",async function (req, response) {
   const {trip_name,city,str_date,end_date,route,website,budjet,member,command}= req.body;
   
@@ -121,7 +211,7 @@ app.post("/login", async function (request, response) {
       const token = jwt.sign({id: userfrondb._id},"suryamsp")
       response.send({message:"succssful login", token:token});
     }else{
-      response.status(400).semd({message:"invalid credentials"});
+      response.status(400).send({message:"invalid credentials"});
     }
   } 
 });
@@ -138,8 +228,8 @@ async function gen_password(new_pass){
   const no_round=10;
   const salt = await bcrypt.genSalt(no_round);
   const hashedpassword = await bcrypt.hash(new_pass, salt);
-  console.log(salt);
-  console.log(hashedpassword);
+  // console.log(salt);
+  // console.log(hashedpassword);
   return hashedpassword;
 }
 
