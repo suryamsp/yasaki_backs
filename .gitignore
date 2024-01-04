@@ -1,45 +1,22 @@
-node_modules
-build
-# Local Netlify folder
-.netlify
+# .gitignore
 
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Ignore Node.js build artifacts
+node_modules/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Ignore log files and other local files
+*.log
+*.env
 
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
+# Ignore macOS system files
 .DS_Store
-*.pem
+# .gitignore
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
+# Ignore Node.js build artifacts
+node_modules/
 
-# local env files
-.env*.local
+# Ignore log files and other local files
+*.log
+*.env
 
-# vercel
-.vercel
-.firebase/
-
-.env
-
-# Contentlayer
-.contentlayer
-
-.vscode
+# Ignore macOS system files
+.DS_Store
