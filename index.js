@@ -1,33 +1,38 @@
 // const express = require("express"); // "type": "commonjs"
-import express, { request, response } from "express"; // "type": "module"
-const app = express();
+import express from "express"; // "type": "module"
 import bcrypt, { hash } from "bcrypt";
 import cors from 'cors';
 import { MongoClient } from "mongodb";
 import  jwt  from "jsonwebtoken";
 import { authe } from "./middleware/auth.js";
 import * as dotenv from 'dotenv';
+
+
 dotenv.config()
 
+const app = express();
+const PORT = 4000; // Default to 3000 if PORT is not set in the environment
+const mongo_url = process.env.MONGO_URL;
 
-const PORT = process.env.PORT;
 
 app.use(express.json({ limit: '10mb' }));
 app.use(cors());
 
-
-const mongo_url = process.env.mongo_url;
-
-
-export const client = new MongoClient(mongo_url); 
-await client.connect(); 
-console.log("mongodb is connected ");
+export const client = new MongoClient(mongo_url);
 
 
+try {
+    await client.connect();
+    console.log("MongoDB is connected");
+} catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+}
 
 
 
-app.get("/Triplist",authe, async function (request, response) {
+
+
+app.get("/Triplist", async function (request, response) {
   const list= await client
   .db("Tripdb")
   .collection("addlist")
@@ -36,7 +41,7 @@ app.get("/Triplist",authe, async function (request, response) {
   response.send(list);
 });
 
-app.get("/Updatelist",authe, async function (request, response) {
+app.get("/Updatelist", async function (request, response) {
   const list= await client
   .db("Tripdb")
   .collection("updatelist")
@@ -54,7 +59,7 @@ app.get("/Addnotes", async function (request, response) {
   response.send(list);
 });
 
-app.get("/member",authe, async function (request, response) {
+app.get("/member",async function (request, response) {
   const list= await client
   .db("Tripdb")
   .collection("login")
