@@ -191,7 +191,7 @@ async function Update_trip(data) {
 }
 
 app.post("/signup", async function (request, response) {
-  const {name, email, newpasssword}= request.body;
+  const {name, email, newpassword}= request.body;
   const userfrondb = await getUsername(name);
   if(userfrondb){
     response.status(400).send({message:"username alreadyy exit"})
@@ -233,10 +233,10 @@ async function createUsers(data) {
     .insertOne(data);
 }
 
-async function gen_password(new_pass){
+async function gen_password(newpassword){
   const no_round=10;
   const salt = await bcrypt.genSalt(no_round);
-  const hashedpassword = await bcrypt.hash(new_pass, salt);
+  const hashedpassword = await bcrypt.hash(newpassword, salt);
   // console.log(salt);
   // console.log(hashedpassword);
   return hashedpassword;
