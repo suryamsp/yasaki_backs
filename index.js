@@ -45,7 +45,7 @@ app.get("/Updatelist",authe, async function (request, response) {
   response.send(list);
 });
 
-app.get("/Addnotes",authe, async function (request, response) {
+app.get("/Addnotes", async function (request, response) {
   const list= await client
   .db("Tripdb")
   .collection("addnotes")
