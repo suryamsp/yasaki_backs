@@ -16,7 +16,12 @@ const mongo_url = process.env.MONGO_URL;
 
 
 app.use(express.json({ limit: '10mb' }));
-app.use(cors());
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
 
 export const client = new MongoClient(mongo_url);
 
@@ -186,12 +191,12 @@ async function Update_trip(data) {
 }
 
 app.post("/signup", async function (request, response) {
-  const {name, email, new_pass}= request.body;
+  const {name, email, newpasssword}= request.body;
   const userfrondb = await getUsername(name);
   if(userfrondb){
     response.status(400).send({message:"username alreadyy exit"})
   } else{
-    const hashedpassword = await gen_password(new_pass);
+    const hashedpassword = await gen_password(newpassword);
     const result = await createUsers({
       username: name,
       Email: email,
