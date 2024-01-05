@@ -11,7 +11,7 @@ import * as dotenv from 'dotenv';
 dotenv.config()
 
 const app = express();
-const PORT = 4000; // Default to 3000 if PORT is not set in the environment
+const PORT = process.env.PORT; // Default to 3000 if PORT is not set in the environment
 const mongo_url = process.env.MONGO_URL;
 
 
