@@ -105,6 +105,21 @@ console.log(title);
   .deleteOne({title:title});
 }
 
+app.delete("/member/:title", async function (request, response) {
+  const { title } = request.params;
+
+  const deletenote = await Deletemember(title);
+  deletenote.deletedCount >= 1
+    ? response.send({ message: "delete movie suessfully" }) : response.status(404).send(`movie not found`);
+});
+
+ async function Deletemember (title) {
+  return await client
+  .db("Tripdb")
+  .collection("login")
+  .deleteOne({title:title});
+}
+
 
 
 
