@@ -1,33 +1,44 @@
 // const express = require("express"); // "type": "commonjs"
-import express, { request, response } from "express"; // "type": "module"
-const app = express();
+import express from "express"; // "type": "module"
 import bcrypt, { hash } from "bcrypt";
 import cors from 'cors';
 import { MongoClient } from "mongodb";
 import  jwt  from "jsonwebtoken";
 import { authe } from "./middleware/auth.js";
 import * as dotenv from 'dotenv';
+
+
 dotenv.config()
 
+const app = express();
+const PORT = process.env.PORT || 3000; // Default to 3000 if PORT is not set in the environment
+const mongo_url = process.env.MONGO_URL;
 
-const PORT = process.env.PORT;
 
 app.use(express.json({ limit: '10mb' }));
-app.use(cors());
+app.use((request, response, next) => {
+  response.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+  response.header('Access-Control-Allow-Origin','https://nxttrip.netlify.app');
+  response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  response.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
+export const client = new MongoClient(mongo_url);
 
 
-const mongo_url = process.env.mongo_url;
+try {
+    await client.connect();
+    console.log("MongoDB is connected");
+} catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+}
 
 
-export const client = new MongoClient(mongo_url); 
-await client.connect(); 
-console.log("mongodb is connected ");
 
 
 
-
-
-app.get("/Triplist",authe, async function (request, response) {
+app.get("/Triplist", async function (request, response) {
   const list= await client
   .db("Tripdb")
   .collection("addlist")
@@ -36,7 +47,7 @@ app.get("/Triplist",authe, async function (request, response) {
   response.send(list);
 });
 
-app.get("/Updatelist",authe, async function (request, response) {
+app.get("/Updatelist", async function (request, response) {
   const list= await client
   .db("Tripdb")
   .collection("updatelist")
@@ -45,7 +56,7 @@ app.get("/Updatelist",authe, async function (request, response) {
   response.send(list);
 });
 
-app.get("/Addnotes",authe, async function (request, response) {
+app.get("/Addnotes", async function (request, response) {
   const list= await client
   .db("Tripdb")
   .collection("addnotes")
@@ -54,7 +65,7 @@ app.get("/Addnotes",authe, async function (request, response) {
   response.send(list);
 });
 
-app.get("/member",authe, async function (request, response) {
+app.get("/member",async function (request, response) {
   const list= await client
   .db("Tripdb")
   .collection("login")
@@ -181,12 +192,12 @@ async function Update_trip(data) {
 }
 
 app.post("/signup", async function (request, response) {
-  const {name, email, new_pass}= request.body;
+  const {name, email, newpassword}= request.body;
   const userfrondb = await getUsername(name);
   if(userfrondb){
     response.status(400).send({message:"username alreadyy exit"})
   } else{
-    const hashedpassword = await gen_password(new_pass);
+    const hashedpassword = await gen_password(newpassword);
     const result = await createUsers({
       username: name,
       Email: email,
@@ -223,10 +234,10 @@ async function createUsers(data) {
     .insertOne(data);
 }
 
-async function gen_password(new_pass){
+async function gen_password(newpassword){
   const no_round=10;
   const salt = await bcrypt.genSalt(no_round);
-  const hashedpassword = await bcrypt.hash(new_pass, salt);
+  const hashedpassword = await bcrypt.hash(newpassword, salt);
   // console.log(salt);
   // console.log(hashedpassword);
   return hashedpassword;
