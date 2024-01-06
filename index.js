@@ -117,7 +117,7 @@ app.delete("/member/:title", async function (request, response) {
   return await client
   .db("Tripdb")
   .collection("login")
-  .deleteOne({title:title});
+  .deleteOne({username:title});
 }
 
 
