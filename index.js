@@ -56,12 +56,12 @@ app.get("/Triplist/:names", async function (request, response) {
 
   response.send(list);
 });
-app.get("/Updatelist/:names", async function (request, response) {
-  const names = request.params.names; // Correct way to access parameter value
+app.get("/Updatelist/:namess", async function (request, response) {
+  const namess = request.params.namess; // Correct way to access parameter value
   const list = await client
     .db("Tripdb")
     .collection("updatelist")
-    .findOne({ trip_name: names });
+    .findOne({ trip_name: namess });
 
   response.send(list);
 });
