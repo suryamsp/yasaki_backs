@@ -48,12 +48,24 @@ app.get("/Triplist", async function (request, response) {
 });
 
 app.get("/Triplist/:names", async function (request, response) {
-  const list= await client
-  .db("Tripdb")
-  .collection("addlist")
-  .findOne({trip_name:names})
+  const names = request.params.names; // Correct way to access parameter value
+  const list = await client
+    .db("Tripdb")
+    .collection("addlist")
+    .findOne({ trip_name: names });
+
   response.send(list);
 });
+app.get("/Updatelist/:names", async function (request, response) {
+  const names = request.params.names; // Correct way to access parameter value
+  const list = await client
+    .db("Tripdb")
+    .collection("updatelist")
+    .findOne({ trip_name: names });
+
+  response.send(list);
+});
+
 
 app.get("/Updatelist", async function (request, response) {
   const list= await client
