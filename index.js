@@ -47,6 +47,14 @@ app.get("/Triplist", async function (request, response) {
   response.send(list);
 });
 
+app.get("/Triplist/:names", async function (request, response) {
+  const list= await client
+  .db("Tripdb")
+  .collection("addlist")
+  .findOne({trip_name:names})
+  response.send(list);
+});
+
 app.get("/Updatelist", async function (request, response) {
   const list= await client
   .db("Tripdb")
