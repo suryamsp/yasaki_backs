@@ -11,7 +11,7 @@ import * as dotenv from 'dotenv';
 dotenv.config()
 
 const app = express();
-const PORT = process.env.PORT || 3000; // Default to 3000 if PORT is not set in the environment
+const PORT = process.env.PORT; // Default to 3000 if PORT is not set in the environment
 const mongo_url = process.env.MONGO_URL;
 
 
@@ -23,6 +23,7 @@ app.use((request, response, next) => {
   response.header('Access-Control-Allow-Headers', 'Content-Type');
   next();
 });
+
 
 export const client = new MongoClient(mongo_url);
 
