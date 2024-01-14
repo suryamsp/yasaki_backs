@@ -178,11 +178,12 @@ async function Updatenotes(titles,data) {
 }
 
 app.post("/Add_notes",async function (req, response) {
-  const {title,notes}= req.body;
+  const {title,notes,date}= req.body;
   
   const results = await Add_notes({
       title:title,
       notes:notes,
+      date:date,
       
   });
   response.send(results);
