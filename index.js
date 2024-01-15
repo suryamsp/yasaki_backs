@@ -111,19 +111,19 @@ app.delete("/:name", async function (request, response) {
   .deleteOne({trip_name:name});
 }
 
-app.delete("/notes/:title", async function (request, response) {
-  const { title } = request.params;
+app.delete("/notes/:titl", async function (request, response) {
+  const { titl } = request.params;
 console.log(title);
-  const deletenote = await Deletenote(title);
+  const deletenote = await Deletenote(titl);
   deletenote.deletedCount >= 1
     ? response.send({ message: "delete movie suessfully" }) : response.status(404).send(`movie not found`);
 });
 
- async function Deletenote (title) {
+ async function Deletenote (titl) {
   return await client
   .db("Tripdb")
   .collection("addnotes")
-  .deleteOne({title:title});
+  .deleteOne({title:titl});
 }
 
 app.delete("/member/:title", async function (request, response) {
