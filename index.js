@@ -112,7 +112,7 @@ app.delete("/:name", async function (request, response) {
 }
 
 app.delete("/notes/:mess", async function (request, response) {
-  const { mess } = request.params.mess;
+  const mess  = request.params.mess;
 console.log(title);
   const deletenote = await Deletenote(mess);
   deletenote.deletedCount >= 1
