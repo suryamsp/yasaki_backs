@@ -113,7 +113,7 @@ app.delete("/:name", async function (request, response) {
 
 app.delete("/notes/:mess", async function (request, response) {
   const mess  = request.params.mess;
-console.log(title);
+
   const deletenote = await Deletenote(mess);
   deletenote.deletedCount >= 1
     ? response.send({ message: "delete movie suessfully" }) : response.status(404).send(`movie not found`);
