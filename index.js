@@ -14,15 +14,15 @@ const app = express();
 const PORT = process.env.PORT; // Default to 3000 if PORT is not set in the environment
 const mongo_url = process.env.MONGO_URL;
 
-
+app.use(cors());
 app.use(express.json({ limit: '10mb' }));
-app.use((request, response, next) => {
-  response.header('Access-Control-Allow-Origin', 'http://localhost:5173');
-  response.header('Access-Control-Allow-Origin','https://nxttrip.netlify.app');
-  response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  response.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
+// app.use((request, response, next) => {
+//   response.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+//   response.header('Access-Control-Allow-Origin','https://nxttrip.netlify.app');
+//   response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+//   response.header('Access-Control-Allow-Headers', 'Content-Type');
+//   next();
+// });
 
 
 export const client = new MongoClient(mongo_url);
@@ -111,19 +111,18 @@ app.delete("/:name", async function (request, response) {
   .deleteOne({trip_name:name});
 }
 
-app.delete("/notes/:mess", async function (request, response) {
-  const { mess } = request.params;
-console.log(title);
-  const deletenote = await Deletenote(mess);
+app.delete("/delete/:data", async function (request, response) {
+  const { data } = request.params;
+  const deletenote = await Deletenote(data);
   deletenote.deletedCount >= 1
     ? response.send({ message: "delete movie suessfully" }) : response.status(404).send(`movie not found`);
 });
 
- async function Deletenote (mess) {
+ async function Deletenote (data) {
   return await client
   .db("Tripdb")
   .collection("addnotes")
-  .deleteOne({title:mess});
+  .deleteOne({title:data});
 }
 
 app.delete("/member/:title", async function (request, response) {
@@ -157,10 +156,10 @@ app.post("/Add_trip",async function (req, response) {
   response.send(results);
 });
 
-app.put("/notes/:titles",async function (req, response) {
+app.put("/edit/:titles",async function (req, response) {
   const {titles}= req.params;
   const {title,notes}= req.body;
-  
+  console.log(titles);
   const updateresult = await  Updatenotes(titles,{
     title:title,
     notes:notes,
