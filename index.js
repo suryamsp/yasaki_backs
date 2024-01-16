@@ -283,7 +283,7 @@ async function getUsername(name) {
   return await client
     .db("Tripdb")
     .collection("login")
-    .findOne({ username: name });
+    .findOne({ username:name});
 }
 
 
