@@ -1,6 +1,10 @@
 // const express = require("express"); // "type": "commonjs"
 import express from "express"; // "type": "module"
-import bcrypt, { hash } from "bcrypt";
+import bcrypt from "bcrypt";
+import { hash } from "bcrypt";
+
+// Now you can use the hash() function directly
+
 import cors from 'cors';
 import { MongoClient } from "mongodb";
 import  jwt  from "jsonwebtoken";
@@ -229,6 +233,7 @@ async function Update_trip(data) {
 
 app.post("/signup", async function (request, response) {
   const {name, email, newpassword}= request.body;
+
   const userfrondb = await getUsername(name);
   if(userfrondb){
     response.status(400).send({message:"username alreadyy exit"})
@@ -246,15 +251,19 @@ app.post("/signup", async function (request, response) {
 });
 app.post("/login", async function (request, response) {
   const {name, password}= request.body;
-  const userfrondb = await getUsername(name);
-  if(!userfrondb){
-    response.status(400).send({message:"invalid credentials"})
-  }else{
-    const storedpassword =  userfrondb.password;
-    const checkstoredpassword= await bcrypt.compare(password,storedpassword);
-    console.log(checkstoredpassword);
-    if(checkstoredpassword){
-      const token = jwt.sign({id: userfrondb._id},"suryamsp")
+  const userfromdb = await getUsername(name);
+
+  if(!userfromdb){
+    response.status(400).send({message:"invalid"})
+  }
+  else{
+    const storedPassword =  userfromdb.password;
+
+    const checkStoredPassword = await bcrypt.compare(password, storedPassword);
+
+   
+    if(checkStoredPassword){
+      const token = jwt.sign({username: name},"suryamsp")
       response.send({message:"succssful login", token:token});
     }else{
       response.status(400).send({message:"invalid credentials"});
