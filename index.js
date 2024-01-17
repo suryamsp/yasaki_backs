@@ -208,7 +208,6 @@ app.post("/update_trip",async function (req, response) {
       str_date:      str_date,
       end_date:      end_date,
       route:      route,
-      website:      website,
       budjet:      budjet,
       member:      member,
       command:      command,
