@@ -141,7 +141,7 @@ app.delete("/delete/:name", async function (req, response) {
 });
 
 async function deleteLeave(name) {
-  await client.connect();
+ 
   return await client
     .db("oladb")
     .collection("olaleave")
@@ -166,7 +166,7 @@ app.delete("/deleteall", async function (req, response) {
 });
 
 async function deleteAll(collectionName) {
-  await client.connect();
+
   return await client
     .db("oladb")
     .collection(collectionName)
