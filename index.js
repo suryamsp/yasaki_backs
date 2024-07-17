@@ -11,7 +11,7 @@ import { MongoClient } from "mongodb";
 
 
 
-
+app.use(express.json())
 
 dotenv.config()
 
