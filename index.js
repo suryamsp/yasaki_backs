@@ -1,7 +1,8 @@
 // const express = require("express"); // "type": "commonjs"
 import express from "express"; // "type": "module"
-import bcrypt from "bcrypt";
 
+
+import * as dotenv from 'dotenv';
 
 // Now you can use the hash() function directly
 
@@ -9,7 +10,7 @@ import cors from 'cors';
 import { MongoClient } from "mongodb";
 
 
-import * as dotenv from 'dotenv';
+
 
 
 dotenv.config()
