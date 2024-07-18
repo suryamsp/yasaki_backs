@@ -15,7 +15,7 @@ app.use(cors());
 
 const PORT = process.env.PORT; 
 const mongo_url = process.env.MONGO_URL;
-export const client = new MongoClient(MONGO_URL);
+export const client = new MongoClient(mongo_url);
 console.log("mongodb is connected ");
 
 
