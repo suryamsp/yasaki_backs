@@ -1,29 +1,25 @@
-// const express = require("express"); // "type": "commonjs"
-import express from "express"; // "type": "module"
-
-
 import * as dotenv from 'dotenv';
-
-// Now you can use the hash() function directly
-
-import cors from 'cors';
-import { MongoClient } from "mongodb";
-
-
-
-
 
 dotenv.config()
 
+import express from 'express';
 const app = express();
-const PORT = process.env.PORT; // Default to 3000 if PORT is not set in the environment
+import { MongoClient } from "mongodb";
+import cors from "cors";
+
+
+
+
+app.use(express.json());
+app.use(cors());
+
+const PORT = process.env.PORT; 
 const mongo_url = process.env.MONGO_URL;
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use((request, response, next) => {
   response.header('Access-Control-Allow-Origin', 'http://localhost:5173');
-  response.header('Access-Control-Allow-Origin', 'https://olai-back.onrender.com');
   response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   response.header('Access-Control-Allow-Headers', 'Content-Type');
   next();
@@ -31,6 +27,7 @@ app.use((request, response, next) => {
 
 
 export const client = new MongoClient(mongo_url);
+console.log("mongodb is connected ");
 
 
 try {
@@ -142,7 +139,7 @@ app.delete("/delete/:name", async function (req, response) {
 });
 
 async function deleteLeave(name) {
-  await client.connect();
+ 
   return await client
     .db("oladb")
     .collection("olaleave")
@@ -167,7 +164,7 @@ app.delete("/deleteall", async function (req, response) {
 });
 
 async function deleteAll(collectionName) {
-  await client.connect();
+
   return await client
     .db("oladb")
     .collection(collectionName)
