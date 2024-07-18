@@ -11,7 +11,7 @@ import cors from "cors";
 
 
 app.use(express.json());
-app.use(cors());
+
 
 const PORT = process.env.PORT; 
 const mongo_url = process.env.MONGO_URL;
