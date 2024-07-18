@@ -16,7 +16,7 @@ app.use(express.json());
 const PORT = process.env.PORT; 
 const mongo_url = process.env.MONGO_URL;
 
-const allowedOrigins = ['http://localhost:5173', 'https://olai-back.onrender.com'];
+const allowedOrigins = ['http://localhost:5173'];
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
