@@ -23,6 +23,7 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use((request, response, next) => {
   response.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+  response.header('Access-Control-Allow-Origin', 'https://olai-back.onrender.com');
   response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   response.header('Access-Control-Allow-Headers', 'Content-Type');
   next();
