@@ -4,7 +4,7 @@ dotenv.config()
 
 import express from 'express';
 const app = express();
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
 
 
@@ -62,6 +62,10 @@ app.get("/output", async function (request, response) {
   .toArray();
   response.send(list);
 });
+
+
+
+
 
 app.get("/leave", async function (request, response) {
   const list= await client
@@ -151,6 +155,24 @@ async function deleteLeave(name) {
     .collection("olaleave")
     .deleteOne({ name: name });
 }
+
+
+app.delete("/output/:id", async function (request, response) {
+    const id = request.params.id; 
+    const objectId = new ObjectId(id)
+    const results = await deletedata(objectId);
+  response.send(results);
+ 
+});
+
+async function deletedata(data) {
+
+  return await client
+    .db("oladb")
+    .collection('olaoutput')
+    .deleteOne({ _id: data });
+}
+
 
 
 
