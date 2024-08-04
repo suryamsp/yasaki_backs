@@ -31,7 +31,7 @@ app.use((request, response, next) => {
 });
 
 
-export const client = new MongoClient(mongo_url);
+const client = new MongoClient(mongo_url);
 console.log("mongodb is connected ");
 
 
